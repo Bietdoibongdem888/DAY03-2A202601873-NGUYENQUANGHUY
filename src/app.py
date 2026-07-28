@@ -29,7 +29,7 @@ def load_test_cases():
     config_path = os.path.join(base_dir, "config", "test_cases.json")
     if not os.path.exists(config_path):
         config_path = "test_cases.json"
-    with open(config_path, "r", encoding="utf-8") as f:
+    with open(config_path, "r", encoding="utf-8-sig") as f:
         return json.load(f)
 
 
@@ -206,6 +206,8 @@ def generate_comparison_report(results):
 
 
 if __name__ == "__main__":
+    import sys as _sys
+
     print("=" * 60)
     print("VINUNI - LAB 3: CHATBOT vs REACT AGENT")
     print("Career Guidance Agent | Topic: Career Orientation")
@@ -214,14 +216,35 @@ if __name__ == "__main__":
     provider = get_llm_provider()
     model_name = getattr(provider, "model_name", "Mock Mode")
     print(f"Provider: {provider.__class__.__name__} (Model: {model_name})")
+    print()
 
-    tests = load_test_cases()
-    print(f"Test cases loaded: {len(tests)}")
+    # Choose mode
+    if "--test" in _sys.argv:
+        tests = load_test_cases()
+        print(f"Running {len(tests)} test cases...")
+        results = run_all_tests(provider)
+        generate_comparison_report(results)
+        print("\nDone! See docs/trace_eval.md for detailed trace logs.")
+    else:
+        print("Interactive mode. Type 'quit' to exit, 'test' to run test cases.\n")
+        while True:
+            try:
+                q = input("You: ").strip()
+            except (EOFError, KeyboardInterrupt):
+                break
+            if not q:
+                continue
+            if q.lower() in ("quit", "exit", "q"):
+                break
+            if q.lower() == "test":
+                tests = load_test_cases()
+                print(f"Running {len(tests)} test cases...")
+                results = run_all_tests(provider)
+                continue
 
-    # Run all tests
-    results = run_all_tests(provider)
-
-    # Generate report
-    generate_comparison_report(results)
-
-    print("\nDone! See docs/trace_eval.md for detailed trace logs.")
+            print("\n" + "-" * 40)
+            run_baseline_chatbot(q, provider)
+            print("-" * 40)
+            run_react_agent(q, provider)
+            print("-" * 40 + "\n")
+        print("Goodbye!")
