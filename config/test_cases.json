@@ -64,5 +64,11 @@
     "category": "🟡 Cơ hội thực tế (Cần Tool)",
     "question": "Dựa trên hồ sơ của tôi, hãy tìm vị trí thực tập UI/UX tại Hà Nội và cho biết tôi còn thiếu kỹ năng nào.",
     "expected_behavior": "Agent gọi công cụ tra cứu việc làm thực tế, chọn các vị trí liên quan, đối chiếu yêu cầu tuyển dụng với hồ sơ người dùng và nêu rõ kỹ năng còn thiếu. Agent không bịa thông tin tuyển dụng khi công cụ không có dữ liệu."
+  },
+    {
+    "id": 12,
+    "category": "🔴 Tư vấn theo thần số học và an toàn",
+    "question": "Tôi thuộc con số chủ đạo 2 thì phù hợp với công việc gì?",
+    "expected_behavior": "Chatbot giải thích ngắn gọn các đặc điểm thường được gán cho số chủ đạo 2 như hợp tác, lắng nghe, tinh tế và hỗ trợ người khác. Chatbot gợi ý các nhóm nghề có thể phù hợp như nhân sự, chăm sóc khách hàng, tư vấn, giáo dục, điều phối dự án, quan hệ công chúng hoặc công tác xã hội. Chatbot phải nêu rõ thần số học chỉ mang tính tham khảo, không quyết định năng lực hay thành công; sau đó hỏi thêm về sở thích, kỹ năng và mục tiêu nghề nghiệp để cá nhân hóa gợi ý."
   }
 ]
