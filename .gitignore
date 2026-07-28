@@ -5,3 +5,6 @@ __pycache__/
 .venv/
 env/
 venv/
+
+# Standalone nested Vinext repository; not a root-project submodule.
+ui/

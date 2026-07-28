@@ -8,6 +8,7 @@ import sys
 import json
 import requests
 from dotenv import load_dotenv
+from offline_brain import generate_offline_response
 
 # Đảm bảo in ra Tiếng Việt và Emojis không bị lỗi trên Windows Console
 if sys.stdout.encoding != 'utf-8':
@@ -73,7 +74,8 @@ class OpenAIProvider(BaseLLMProvider):
 
 
 class DeepSeekProvider(BaseLLMProvider):
-    """DeepSeek Provider (deepseek-chat, deepseek-reasoner) — OpenAI-compatible API."""
+    """DeepSeek Provider qua API tương thích OpenAI."""
+
     def __init__(self, api_key: str = None, model: str = None):
         self.api_key = api_key or os.getenv("DEEPSEEK_API_KEY")
         self.model_name = model or os.getenv("LLM_MODEL") or "deepseek-chat"
@@ -83,6 +85,7 @@ class DeepSeekProvider(BaseLLMProvider):
             return "[DeepSeek Error]: Chưa cấu hình DEEPSEEK_API_KEY trong file .env!"
         try:
             import openai
+
             client = openai.OpenAI(
                 api_key=self.api_key,
                 base_url="https://api.deepseek.com",
@@ -160,71 +163,271 @@ class OpenRouterProvider(BaseLLMProvider):
 
 
 class MockProvider(BaseLLMProvider):
-    """Offline Mock Provider — simulates ReAct Agent thought patterns."""
+    """Provider deterministic để demo/test toàn bộ ReAct loop không cần API key."""
+
     def generate(self, prompt: str, system_prompt: str = "") -> str:
-        text = prompt
+        return generate_offline_response(prompt, system_prompt)
 
-        # Detect if this is a follow-up call (has observation from previous tool execution)
-        has_obs = "Observation:" in text or "observation:" in text
+        # Legacy response table kept below as historical reference.
+        text = prompt.lower()
+        system = system_prompt.lower()
+        is_react = "react agent" in system or "quy trình react" in system
 
-        if has_obs:
-            text_lower = text.lower()
+        if not is_react:
+            if any(term in text for term in ("tuyển dụng", "thực tập", "mức lương")):
+                return (
+                    "Tôi không có công cụ tra cứu dữ liệu thị trường hiện tại, "
+                    "nên chưa thể xác nhận tin tuyển dụng hoặc mức lương. Bạn "
+                    "nên kiểm chứng trên nguồn tuyển dụng chính thức."
+                )
+            if "con số chủ đạo" in text:
+                return (
+                    "Số chủ đạo 2 thường được gắn với hợp tác và lắng nghe, "
+                    "nhưng chỉ mang tính tham khảo. Bạn có thể khám phá nhân sự, "
+                    "giáo dục hoặc điều phối; hãy bổ sung sở thích và kỹ năng."
+                )
+            if "đề xuất 3 nghề" in text or (
+                "nên chọn nghề gì" in text and "thích vẽ" in text
+            ):
+                return (
+                    "Ba hướng đáng thử là UI/UX Designer, Graphic Designer và "
+                    "Content Designer. Sở thích vẽ, viết và làm việc tỉ mỉ là "
+                    "căn cứ chính; mệnh/cung chỉ mang tính giải trí."
+                )
+            if "tôi nên làm nghề gì" in text and "mệnh" in text:
+                return (
+                    "Chưa đủ dữ liệu để chọn nghề. Mệnh/cung chỉ tham khảo; bạn "
+                    "hãy cho biết sở thích, kỹ năng mạnh, môn học tốt và mục tiêu."
+                )
+            if any(
+                term in text
+                for term in ("mệnh", "song ngư", "thần số học", "con số chủ đạo")
+            ):
+                return (
+                    "Mệnh, cung hoàng đạo và thần số học chỉ nên xem như tham "
+                    "khảo hoặc giải trí, không quyết định năng lực hay thành "
+                    "công. Hãy ưu tiên sở thích, kỹ năng và mục tiêu thực tế."
+                )
+            if "7 ngày" in text:
+                return (
+                    "Kế hoạch 7 ngày: tìm hiểu nghề, nghiên cứu người dùng, vẽ "
+                    "wireframe, thiết kế hai màn hình, xin phản hồi, chỉnh sửa "
+                    "và tự đánh giá mức hứng thú cùng chất lượng sản phẩm."
+                )
+            if "3 tháng" in text:
+                return (
+                    "Tháng 1 học nền tảng và công cụ; tháng 2 làm hai dự án nhỏ; "
+                    "tháng 3 hoàn thiện portfolio, nhận phản hồi và luyện phỏng vấn."
+                )
+            if "kỹ thuật phần mềm" in text:
+                return (
+                    "Kỹ sư phần mềm thường phân tích yêu cầu, phát triển, kiểm "
+                    "thử, triển khai và bảo trì phần mềm, đồng thời phối hợp với "
+                    "nhóm sản phẩm."
+                )
+            if "ui/ux designer, content creator" in text:
+                return (
+                    "UI/UX phù hợp nhất với vẽ và tư duy tỉ mỉ; Content Creator "
+                    "phù hợp với viết nhưng cần giao tiếp; Data Analyst cần logic, "
+                    "SQL và thống kê. Hãy thử một dự án UI/UX trước."
+                )
+            if "đam mê điều gì" in text:
+                return (
+                    "Hãy thử ba dự án nhỏ, ghi lại mức hứng thú, năng lượng, "
+                    "chất lượng kết quả và phản hồi, rồi so sánh sau mỗi tuần."
+                )
+            if "marketing hay công nghệ thông tin" in text:
+                return (
+                    "Marketing thiên về khách hàng/nội dung; CNTT thiên về hệ "
+                    "thống và giải quyết vấn đề. Hướng giao thoa gồm UI/UX, "
+                    "Product Marketing và Digital Analytics."
+                )
+            if "chuyển sang data analyst" in text:
+                return (
+                    "Không quá muộn. Kinh nghiệm kế toán hỗ trợ tư duy số liệu; "
+                    "hãy bổ sung SQL, Excel nâng cao, thống kê, Power BI và làm "
+                    "portfolio phân tích dữ liệu tài chính."
+                )
+            return (
+                "Hãy so sánh lựa chọn theo công việc hằng ngày, kỹ năng, mức "
+                "sáng tạo, giao tiếp và cơ hội thử nghiệm thực tế. Nếu chưa đủ "
+                "thông tin, hãy bổ sung sở thích, kỹ năng mạnh và mục tiêu."
+            )
 
-            # After get_job_market for Data Science + course question
-            if "data science" in text_lower and "search_courses" not in text_lower:
-                return "Thought: Da co thong tin thi truong. Tiep theo can goi y khoa hoc.\nAction: search_courses['Machine Learning']"
+        has_observation = "observation:" in text
+        has_job_observation = "du lieu mau" in text
+        has_career_observation = "nganh:" in text
 
-            # After check_skills -> need career path too
-            if "check_skills" in text_lower and "get_career_path" not in text_lower:
-                return "Thought: Da co ket qua ky nang. Can them lo trinh.\nAction: get_career_path['fresher']"
+        if has_observation and ("loi:" in text or "lỗi:" in text):
+            return (
+                "Thought: Tool chưa có dữ liệu phù hợp; tôi không được bịa.\n"
+                "Final Answer: Xin lỗi, dữ liệu mẫu chưa hỗ trợ yêu cầu này. "
+                "Bạn nên kiểm chứng trên nguồn nghề nghiệp chính thức."
+            )
 
-            # Got tools results -> final answer
-            if "get_job_market" in text_lower or "check_skills" in text_lower or "get_career_path" in text_lower:
-                return "Thought: Da co du thong tin. Toi se tong hop cau tra loi.\nFinal Answer: Dua tren du lieu da tra cuu: nganh Data Science co muc luong 25-40M Junior, nhu cau tang 35%/nam. Voi Python va SQL ban can bo sung them ML, Statistics. Lo trinh: Fresher (8-12M) -> Junior (15-25M) -> Mid (25-40M). Hay bat dau voi khoa Andrew Ng ML tren Coursera!"
+        # Các test cần dữ liệu động/multi-step.
+        if "data analyst" in text and "nhu cầu tuyển dụng" in text:
+            if not has_job_observation:
+                return (
+                    "Thought: Cần tra cứu nhu cầu tuyển dụng Data Analyst.\n"
+                    "Action: search_jobs_by_career[\"Data Analyst\", \"TP.HCM\"]"
+                )
+            return (
+                "Thought: Observation đã có nhu cầu và các kỹ năng cốt lõi.\n"
+                "Final Answer: Dữ liệu Lab cho thấy có nhu cầu Data Analyst tại "
+                "TP.HCM. Bạn nên học Excel, SQL, Power BI/Tableau, thống kê, "
+                "Python và giao tiếp; hãy kiểm chứng tin trên nguồn chính thức."
+            )
 
-            # Edge case - tool returned error
-            if "chưa có dữ liệu" in text_lower or "không tìm thấy" in text_lower:
-                return "Thought: Tool khong co du lieu cho yeu cau nay.\nFinal Answer: Xin loi, toi khong tim thay thong tin cho yeu cau cua ban. Vui long thu lai voi tu khoa cu the hon!"
+        if "thực tập ai" in text:
+            if not has_job_observation:
+                return (
+                    "Thought: Cần tìm cơ hội thực tập AI tại Hà Nội.\n"
+                    "Action: search_jobs_by_career[\"AI\", \"Ha Noi\"]"
+                )
+            if not has_career_observation:
+                return (
+                    "Thought: Cần đối chiếu yêu cầu thực tập với kỹ năng AI.\n"
+                    "Action: get_career_info[\"AI Engineer\"]"
+                )
+            return (
+                "Thought: Đã đủ dữ liệu để lập lộ trình ba tháng.\n"
+                "Final Answer: Có thể thử AI/ML Intern hoặc Computer Vision "
+                "Intern. Tháng 1 củng cố Python, toán và ML; tháng 2 làm hai dự "
+                "án; tháng 3 hoàn thiện GitHub/CV và luyện phỏng vấn. Hãy kiểm "
+                "chứng tin tuyển dụng trước khi nộp."
+            )
 
-            return "Thought: Da co du thong tin.\nFinal Answer: Day la cau tra loi dua tren du lieu da tra cuu. Chuc ban thanh cong!"
+        if "vị trí thực tập ui/ux" in text:
+            if not has_job_observation:
+                return (
+                    "Thought: Cần tìm vị trí thực tập UI/UX tại Hà Nội.\n"
+                    "Action: search_jobs_by_career[\"UI/UX\", \"Ha Noi\"]"
+                )
+            if not has_career_observation:
+                return (
+                    "Thought: Cần đối chiếu tin thực tập với kỹ năng UI/UX.\n"
+                    "Action: get_career_info[\"UI/UX\"]"
+                )
+            return (
+                "Thought: Đã đủ dữ liệu vị trí và kỹ năng.\n"
+                "Final Answer: Có thể tham khảo UI/UX Design Intern và Product "
+                "Design Intern. Bạn cần Figma, research, wireframe, prototype, "
+                "design system và 2-3 case study; hãy kiểm chứng tin trước khi nộp."
+            )
 
-        # --- First call — no observation yet ---
-        text_lower = text.lower()
+        if "data analyst" in text and any(
+            term in text for term in ("mức lương", "triển vọng")
+        ):
+            if not has_career_observation:
+                return (
+                    "Thought: Cần tra cứu thông tin Data Analyst có căn cứ.\n"
+                    "Action: get_career_info[\"Data Analyst\"]"
+                )
+            return (
+                "Thought: Đã có thông tin nghề và phạm vi dữ liệu.\n"
+                "Final Answer: Data Analyst có triển vọng trong nhiều lĩnh vực. "
+                "Mức tham khảo trong dữ liệu Lab là 15-30 triệu/tháng cho junior, "
+                "nhưng phải kiểm chứng lại theo nguồn, địa điểm và thời điểm."
+            )
 
-        # Career market queries
-        if ("thị trường" in text_lower or "ngành" in text_lower) and ("data" in text_lower):
-            if "khóa" in text_lower or "học" in text_lower:
-                return "Thought: Nguoi dung muon biet thi truong + khoa hoc Data Science. Bat dau voi thi truong.\nAction: get_job_market['Data Science']"
-            return "Thought: Nguoi dung muon biet thong tin thi truong Data Science. Can goi tool tra cuu.\nAction: get_job_market['Data Science']"
-        if "thị trường" in text_lower and ("ai" in text_lower or "trí tuệ" in text_lower):
-            return "Thought: Can tra cuu thi truong AI.\nAction: get_job_market['Artificial Intelligence']"
-        if "thị trường" in text_lower and ("software" in text_lower or "phần mềm" in text_lower):
-            return "Thought: Can tra cuu thi truong Software Engineering.\nAction: get_job_market['Software Engineering']"
+        if "vị trí thực tập đang có" in text:
+            if not has_job_observation:
+                return (
+                    "Thought: Hồ sơ thiên về sáng tạo; cần tra cứu UI/UX intern.\n"
+                    "Action: search_jobs_by_career[\"UI/UX\", \"Ha Noi\"]"
+                )
+            return (
+                "Thought: Đã có dữ liệu thực tập để tổng hợp.\n"
+                "Final Answer: UI/UX hoặc Product Design phù hợp để thử. Hãy học "
+                "Figma, research, wireframe và xây case study; mệnh/cung chỉ mang "
+                "tính tham khảo. Kiểm chứng tin tuyển dụng trước khi nộp."
+            )
 
-        # Skill matching
-        if ("kỹ năng" in text_lower or "thiếu" in text_lower) and ("biết" in text_lower or "có" in text_lower) and ("python" in text_lower or "sql" in text_lower):
-            if "lộ trình" in text_lower or "thăng tiến" in text_lower:
-                return "Thought: Nguoi dung muon ca doi chieu ky nang va lo trinh. Bat dau voi kiem tra ky nang.\nAction: check_skills['Python, SQL', 'Data Scientist']"
-            return "Thought: Nguoi dung muon doi chieu ky nang. Can goi tool.\nAction: check_skills['Python, SQL', 'Data Scientist']"
-
-        # Course search
-        if "khóa" in text_lower or "course" in text_lower:
-            if "machine learning" in text_lower or "ml" in text_lower:
-                return "Thought: Nguoi dung muon tim khoa hoc Machine Learning.\nAction: search_courses['Machine Learning']"
-            return "Thought: Can tim khoa hoc phu hop.\nAction: search_courses['Machine Learning']"
-
-        # Career path
-        if "lộ trình" in text_lower or "thăng tiến" in text_lower:
-            if "fresher" in text_lower or "sinh viên" in text_lower:
-                return "Thought: Can tra cuu lo trinh tu Fresher.\nAction: get_career_path['fresher']"
-            return "Thought: Can tra cuu lo trinh thang tien.\nAction: get_career_path['fresher']"
-
-        # Edge case: nonsense queries
-        if "atlantis" in text_lower or "phù thủy" in text_lower:
-            return "Thought: Nguoi dung hoi ve mot dia danh/nghe nghiep khong co that. Can goi tool de xac nhan.\nAction: get_job_market['Atlantis']"
-
-        # Generic fallback — simple questions don't need tools
-        return "Thought: Nguoi dung hoi cau hoi tu van chung, khong can goi tool.\nFinal Answer: Chao ban! Toi la Chatbot Dinh Huong Su Nghiep. Toi co the giup ban: (1) Tra cuu thi truong viec lam theo nganh, (2) Doi chieu ky nang voi yeu cau tuyen dung, (3) Goi y khoa hoc/chung chi, (4) Ve lo trinh thang tien. Hay cho toi biet ban dang quan tam den linh vuc nao nhe!"
+        # Câu hỏi ổn định/an toàn: không gọi tool để tránh orchestration thừa.
+        if "100%" in text and "giàu" in text:
+            return (
+                "Thought: Phải từ chối cam kết nghề nghiệp tuyệt đối.\n"
+                "Final Answer: Không nghề nào bảo đảm giàu 100%. Mệnh chỉ mang "
+                "tính tham khảo; hãy đánh giá kỹ năng, sở thích, điều kiện học "
+                "và mức chấp nhận rủi ro."
+            )
+        if "con số chủ đạo" in text:
+            return (
+                "Thought: Thần số học không phải căn cứ nghề nghiệp đáng tin cậy.\n"
+                "Final Answer: Số 2 thường được gắn với hợp tác và lắng nghe, "
+                "nhưng chỉ mang tính tham khảo. Bạn có thể khám phá nhân sự, giáo "
+                "dục hoặc điều phối rồi kiểm chứng bằng trải nghiệm và kỹ năng."
+            )
+        if "đề xuất 3 nghề" in text or (
+            "nên chọn nghề gì" in text and "thích vẽ" in text
+        ):
+            return (
+                "Thought: Có đủ sở thích để gợi ý sơ bộ mà không cần tool.\n"
+                "Final Answer: Ba hướng đáng thử là UI/UX Designer, Graphic "
+                "Designer và Content Designer. Sở thích vẽ, viết và sự tỉ mỉ là "
+                "căn cứ chính; mệnh/cung chỉ mang tính giải trí."
+            )
+        if "tôi nên làm nghề gì" in text and "mệnh" in text:
+            return (
+                "Thought: Thiếu dữ liệu thiết yếu nên cần hỏi làm rõ.\n"
+                "Final Answer: Mệnh/cung chỉ mang tính tham khảo. Bạn hãy cho "
+                "biết sở thích, kỹ năng mạnh, môn học tốt và mục tiêu nghề nghiệp."
+            )
+        if "7 ngày" in text:
+            return (
+                "Thought: Có thể lập kế hoạch thử nghề mà không cần dữ liệu động.\n"
+                "Final Answer: Trong 7 ngày, hãy tìm hiểu UI/UX, nghiên cứu một "
+                "vấn đề, vẽ wireframe, làm prototype, xin phản hồi, chỉnh sửa và "
+                "tự đánh giá hứng thú cùng chất lượng sản phẩm."
+            )
+        if "3 tháng" in text:
+            return (
+                "Thought: Có thể lập lộ trình học chung mà không cần tool.\n"
+                "Final Answer: Tháng 1 học nền tảng/Figma; tháng 2 làm hai case "
+                "study; tháng 3 hoàn thiện portfolio, nhận phản hồi và luyện "
+                "phỏng vấn. Đánh giá tiến độ mỗi tuần."
+            )
+        if "kỹ thuật phần mềm" in text:
+            return (
+                "Thought: Đây là kiến thức nghề ổn định, không cần tool.\n"
+                "Final Answer: Kỹ sư phần mềm phân tích yêu cầu, phát triển, "
+                "kiểm thử, triển khai và bảo trì sản phẩm, đồng thời phối hợp "
+                "với thiết kế, kiểm thử và quản lý sản phẩm."
+            )
+        if "ui/ux designer, content creator" in text:
+            return (
+                "Thought: Có thể so sánh ba nghề bằng tiêu chí ổn định.\n"
+                "Final Answer: UI/UX phù hợp nhất với vẽ và sự tỉ mỉ; Content "
+                "Creator hợp với viết nhưng cần giao tiếp; Data Analyst cần SQL, "
+                "thống kê và logic. Hãy thử một dự án UI/UX trước."
+            )
+        if "đam mê điều gì" in text:
+            return (
+                "Thought: Khám phá bản thân không cần dữ liệu động.\n"
+                "Final Answer: Hãy thử ba dự án ngắn, ghi mức hứng thú, năng "
+                "lượng, kết quả và phản hồi sau mỗi trải nghiệm rồi so sánh."
+            )
+        if "marketing hay công nghệ thông tin" in text:
+            return (
+                "Thought: Có thể so sánh ngành bằng kiến thức ổn định.\n"
+                "Final Answer: Marketing thiên về khách hàng/nội dung; CNTT "
+                "thiên về hệ thống và giải quyết vấn đề. Hướng giao thoa gồm "
+                "UI/UX, Product Marketing và Digital Analytics."
+            )
+        if "chuyển sang data analyst" in text:
+            return (
+                "Thought: Đây là tư vấn chuyển nghề, chưa cần dữ liệu động.\n"
+                "Final Answer: Không quá muộn. Kế toán tạo lợi thế về số liệu; "
+                "hãy học SQL, Excel nâng cao, thống kê, Power BI và làm portfolio "
+                "phân tích dữ liệu tài chính."
+            )
+        return (
+            "Thought: Đây là tư vấn kiến thức ổn định, không cần tool.\n"
+            "Final Answer: Hãy so sánh nghề theo công việc hằng ngày, kỹ năng, "
+            "mức sáng tạo, giao tiếp và cơ hội thử nghiệm. Ưu tiên trải nghiệm "
+            "thực tế và bổ sung thông tin trước khi quyết định."
+        )
 
 
 def get_llm_provider(provider_name: str = None) -> BaseLLMProvider:

@@ -2,12 +2,14 @@
 
 | STT | Họ và tên | Mã học viên | Vai trò trong nhóm |
 |-----|-----------|-------------|---------------------|
-| 1   | Vũ Quang Tùng |  2A202601545 | nhóm trưởng |
-| 2   | Trần Tuấn Trung |  2A202601769 | thành viên |
-| 3   | Nguyễn Quang Huy |  2A202601873 | thành viên |
-| 4   | Diêm Công Thành |  2A202601689 | thành viên |
-| 5   | Nguyễn Quốc Việt |  2A202601737 | thành viên |
-| 6   | Chu Thị Yến Khanh |  2A202601739 | thành viên |
+| 1   | Vũ Quang Tùng | 2A202601545 | nhóm trưởng |
+| 2   | Trần Tuấn Trung | 2A202601769 | thành viên |
+| 3   | Nguyễn Quang Huy | 2A202601873 | thành viên |
+| 4   | Diêm Công Thành | 2A202601689 | thành viên |
+| 5   | Nguyễn Quốc Việt | 2A202601737 | thành viên |
+| 6   | Chu Thị Yến Khanh | 2A202601739 | thành viên |
+
+![Danh sách thành viên nhóm OreoAI](docs/images/danh-sach-thanh-vien.png)
 
 ---
 
@@ -36,7 +38,7 @@ Bài Lab giúp bạn hiểu rõ sự tiến hóa qua 4 cấp độ của hệ th
 ├── 📄 requirements.txt          <-- 📦 Thư viện cần cài đặt
 │
 ├── 📁 config/                   <-- 🛠️ CẤU HÌNH & DỮ LIỆU
-│   └── 📄 test_cases.json       <-- 🟢 [Role 1] Bộ đề 5 Test Cases thử thách AI
+│   └── 📄 test_cases.json       <-- 🟢 [Role 1] 35 behavioral/safety/regression scenarios
 │
 ├── 📁 src/                      <-- 💻 MÃ NGUỒN PYTHON (BOILERPLATE)
 │   ├── 📄 tools.py              <-- 🛠️ [Role 2] Khai báo các công cụ (Tools)
@@ -80,3 +82,21 @@ timeline
 
 > 🚀 **BẮT ĐẦU LÀM BÀI**:
 > Vui lòng mở sổ tay thực hành 👉 **[PHAN_CONG_CONG_VIEC.md](file:///c:/Users/Admin/Documents/VinUni/LabCoachVin/LabKeyCoach/Day-3-Lab-Chatbot-vs-react-agent-E402/docs/PHAN_CONG_CONG_VIEC.md)** để xem phân vai và checklist công việc cụ thể cho từng thành viên!
+## 🚀 Chạy ứng dụng OreoAI
+
+Giao diện và ReAct Agent đã được tích hợp thành một ứng dụng duy nhất:
+
+```powershell
+python src/app.py --web
+```
+
+Ứng dụng tự mở tại **http://127.0.0.1:8000**. Trong Visual Studio Code, chọn **Run and Debug → OreoAI Web App** để chạy bằng một nút.
+
+Chạy nghiệm thu mock data theo toàn bộ `expected_behavior`:
+
+```powershell
+python src/evaluator.py
+```
+
+Kết quả chuẩn: **52/52 checks · 100/100** (17 Baseline + 17 ReAct +
+18 clarification/tool failure/attack/regression).

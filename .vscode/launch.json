@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "OreoAI Web App",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/app.py",
+      "args": ["--web"],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "OreoAI Full Test Cases",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/app.py",
+      "args": ["--mode", "all"],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}

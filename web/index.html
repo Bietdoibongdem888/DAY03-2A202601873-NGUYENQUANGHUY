@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#241638">
+  <meta name="description" content="OreoAI - Trợ lý định hướng nghề nghiệp kết hợp Chatbot và ReAct Agent.">
+  <meta property="og:title" content="OreoAI Career Intelligence">
+  <meta property="og:image" content="/og.png">
+  <title>OreoAI · Career Intelligence</title>
+  <link rel="stylesheet" href="/styles.css?v=3">
+  <script src="/app.js?v=4" defer></script>
+</head>
+<body>
+  <main>
+    <nav class="nav-shell" aria-label="Điều hướng chính">
+      <a class="brand" href="#top" aria-label="OreoAI - Trang chủ">
+        <span class="brand-mark" aria-hidden="true"><span></span></span>
+        <span>OreoAI</span>
+      </a>
+      <div class="nav-meta">
+        <span class="status" id="system-status"><i></i> Hệ thống sẵn sàng</span>
+        <button class="score" id="open-test-suite" type="button">35 test cases</button>
+      </div>
+    </nav>
+
+    <section class="hero" id="top">
+      <div class="eyebrow"><span>CAREER INTELLIGENCE</span><b>OreoAI · v1.0</b></div>
+      <h1>Đừng đoán nghề.<br><em>Hãy thử, đo, và chọn.</em></h1>
+      <p>
+        Trợ lý định hướng nghề nghiệp kết hợp tư vấn tự nhiên với dữ liệu từ công cụ.
+        Không hứa hẹn tuyệt đối. Không bịa thị trường. Chỉ đưa ra bước tiếp theo có căn cứ.
+      </p>
+      <div class="hero-stats" aria-label="Chỉ số hệ thống">
+        <div><strong>05</strong><span>Career tools</span></div>
+        <div><strong>35</strong><span>Test scenarios</span></div>
+        <div><strong>04</strong><span>Safety layers</span></div>
+      </div>
+    </section>
+
+    <section class="workspace" aria-label="OreoAI career workspace">
+      <div class="chat-card">
+        <header class="panel-head">
+          <div>
+            <span class="panel-kicker">PHIÊN TƯ VẤN</span>
+            <h2>Career workspace</h2>
+          </div>
+          <div class="mode-switch" aria-label="Chọn chế độ">
+            <button class="active" type="button" data-mode="auto">Auto</button>
+            <button type="button" data-mode="chatbot">Chat</button>
+            <button type="button" data-mode="react">ReAct</button>
+          </div>
+        </header>
+
+        <div class="messages" id="messages" aria-live="polite">
+          <article class="message assistant">
+            <span class="avatar" aria-hidden="true">O</span>
+            <div>
+              <small>OREOAI</small>
+              <p>Chào bạn, mình là OreoAI. Mình không chọn nghề thay bạn — mình giúp bạn nhìn rõ dữ liệu, thử nghề và ra quyết định có căn cứ.</p>
+              <span class="evidence">OreoAI đang trực tuyến</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="suggestions" aria-label="Câu hỏi gợi ý">
+          <button type="button" data-question="Tìm thực tập AI tại Hà Nội">Tìm thực tập AI tại Hà Nội <span>↗</span></button>
+          <button type="button" data-question="So sánh UI/UX và Data Analyst">So sánh UI/UX và Data Analyst <span>↗</span></button>
+          <button type="button" data-question="Lộ trình UI/UX trong 3 tháng">Lộ trình UI/UX trong 3 tháng <span>↗</span></button>
+        </div>
+
+        <form class="composer" id="chat-form">
+          <label for="career-question">Câu hỏi nghề nghiệp</label>
+          <textarea id="career-question" maxlength="2000" placeholder="Ví dụ: Tôi biết Python cơ bản và muốn tìm thực tập AI tại Hà Nội..." rows="2"></textarea>
+          <div class="composer-foot">
+            <span>Đang dùng: <strong id="mode-label">Tự động</strong></span>
+            <button type="submit" id="send-button">Gửi <b>↗</b></button>
+          </div>
+        </form>
+      </div>
+
+      <aside class="trace-card" aria-label="Trace ReAct">
+        <header class="panel-head trace-head">
+          <div>
+            <span class="panel-kicker">OBSERVABILITY</span>
+            <h2>ReAct trace</h2>
+          </div>
+          <span class="live-dot">LIVE</span>
+        </header>
+        <div class="trace-body" id="trace-body">
+          <div class="trace-empty">
+            <div class="orb"><span></span></div>
+            <h3>Chưa cần gọi tool</h3>
+            <p>Đặt câu hỏi về tuyển dụng, mức lương hoặc vị trí thực tập để xem route, tool và trạng thái thực thi.</p>
+          </div>
+        </div>
+        <div class="guardrail">
+          <div><span>◆</span><strong>Safety guardrails</strong></div>
+          <ul>
+            <li><span></span> Tối đa 4 vòng lặp</li>
+            <li><span></span> Chặn Action lặp</li>
+            <li><span></span> Tool allowlist</li>
+            <li><span></span> Safe fallback</li>
+          </ul>
+        </div>
+      </aside>
+    </section>
+
+    <footer>
+      <span>OreoAI · VinUni AI Lab 03</span>
+      <span>Định hướng nghề nghiệp, có căn cứ.</span>
+    </footer>
+
+    <dialog class="test-dialog" id="test-dialog">
+      <div class="test-dialog-head">
+        <div>
+          <span class="panel-kicker">MOCK DATA · DETERMINISTIC</span>
+          <h2>OreoAI acceptance suite</h2>
+          <p>34 behavioral + 18 safety/regression checks theo <code>expected_behavior</code>.</p>
+        </div>
+        <button class="dialog-close" id="close-test-suite" type="button" aria-label="Đóng">×</button>
+      </div>
+      <div class="test-actions">
+        <button class="run-suite" id="run-test-suite" type="button">Chạy toàn bộ 52 checks</button>
+        <strong class="test-result" id="test-result">Chưa chạy</strong>
+      </div>
+      <div class="test-list" id="test-list" aria-live="polite"></div>
+    </dialog>
+  </main>
+</body>
+</html>

@@ -1,40 +1,35 @@
-graph TD
-    START[("User Question")] --> DETECT{"Detect Query Type"}
-    
-    DETECT -->|"Simple / General Advice"| CHATBOT_PATH["🟢 CHATBOT PATH (Level 2)"]
-    DETECT -->|"Needs Real Data / Multi-step"| AGENT_PATH["🟡 REACT AGENT PATH (Level 3)"]
-    
-    CHATBOT_PATH --> LLM1["LLM generates answer<br/>from static knowledge"]
-    LLM1 --> CHAT_OUT[("Answer to User")]
-    
-    AGENT_PATH --> LOOP_START["🔄 ReAct Loop Start<br/>step = 1"]
-    LOOP_START --> THINK["🧠 Thought:<br/>What do I need to know?"]
-    THINK --> ACT{"🛠️ Action:<br/>Which tool to call?"}
-    
-    ACT -->|"Market info"| T1["get_job_market[field]"]
-    ACT -->|"Skills gap"| T2["check_skills[skills, job]"]
-    ACT -->|"Courses"| T3["search_courses[field]"]
-    ACT -->|"Career path"| T4["get_career_path[role]"]
-    ACT -->|"No tool needed"| FINAL
-    
-    T1 --> OBS["👁️ Observation:<br/>Tool returns data"]
-    T2 --> OBS
-    T3 --> OBS
-    T4 --> OBS
-    
-    OBS --> CHECK{"Has enough info?"}
-    CHECK -->|"No, need more"| INC["step += 1"]
-    INC --> GUARD{"step > MAX_ITERATIONS?"}
-    GUARD -->|"Yes"| GUARD_OUT["🛡️ Guardrail:<br/>Stop & notify user"]
-    GUARD -->|"No"| THINK
-    
-    CHECK -->|"Yes"| FINAL["🏁 Final Answer:<br/>Complete response to user"]
-    FINAL --> AGENT_OUT[("Answer to User")]
-    
-    GUARD_OUT --> AGENT_OUT
-    
-    style CHATBOT_PATH fill:#E3F2FD,stroke:#1565C0
-    style AGENT_PATH fill:#FFF3E0,stroke:#E65100
-    style GUARD fill:#FFCDD2,stroke:#C62828
-    style FINAL fill:#C8E6C9,stroke:#2E7D32
-    style START fill:#F3E5F5,stroke:#6A1B9A
+flowchart TD
+    U["User Input"] --> V{"Input Guardrail<br/>hợp lệ, không PII/injection?"}
+    V -- "Không" --> E["Guardrail Response<br/>không gọi LLM/Tool"]
+    V -- "Có" --> I["Intent Classification"]
+    I --> M{"Thiếu thông tin thiết yếu?"}
+    M -- "Có" --> CL["Clarification Path<br/>hỏi tối đa câu cần thiết · 0 tool"]
+    M -- "Không" --> AF["Agentic Fit 6 tiêu chí<br/>0-2 điểm mỗi tiêu chí"]
+    AF --> D{"Tổng điểm / nhu cầu tool"}
+
+    D -- "0-4 hoặc không cần tool" --> C["Chatbot Path<br/>1 LLM call · 0 tool"]
+    C --> CF["Tư vấn tham khảo<br/>không cam kết tuyệt đối"]
+
+    D -- "5-8: Hybrid cân nhắc" --> H{"Có dữ liệu ngoài/cập nhật?"}
+    H -- "Không" --> C
+    H -- "Có" --> A
+    D -- "9-12: ReAct" --> A["OreoAI ReAct Agent"]
+    A --> T["Reason nội bộ: chọn đúng một bước"]
+    T --> X["Action: tool[arg]"]
+    X --> G{"Allowlist + schema + input hợp lệ?"}
+    G -- "Không" --> O1["Observation: error_code<br/>không thực thi"]
+    G -- "Có" --> R["Executor: timeout + retry ≤ 1"]
+    R --> Z{"Output rỗng/sai schema/injection?"}
+    Z -- "Có" --> O1
+    Z -- "Không" --> O2["Observation do ứng dụng chèn<br/>source=mock"]
+    O1 --> B{"Còn budget và có Action mới?"}
+    O2 --> Q{"Đã đủ bằng chứng?"}
+    Q -- "Chưa" --> B
+    B -- "Có" --> T
+    B -- "Không / lặp Action" --> S["Safe fallback · MAX_ITERATIONS"]
+    Q -- "Đủ" --> F["Final Answer có căn cứ<br/>nêu phạm vi và yêu cầu kiểm chứng"]
+    CF --> L["Structured Trace Log<br/>không chứa Thought/secret/PII"]
+    CL --> L
+    E --> L
+    F --> L
+    S --> L
