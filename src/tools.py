@@ -89,6 +89,8 @@ def get_career_path(current_role: str) -> str:
         "fresher": "Lộ trình từ Fresher:\nYear 1: Fresher/Trainee (8-12M) -> Year 1-2: Junior (15-25M) -> Year 2-4: Mid-level (25-40M) -> Year 4-6: Senior (40-60M) -> Year 6+: Lead/Manager (60M+). Tip: Chọn 1 chuyên môn + 1 domain để đi sâu.",
         "student": "Lộ trình từ Sinh viên:\nNăm 3-4: Thực tập (3-6M) -> Tốt nghiệp: Fresher (8-12M) -> +1 năm: Junior (15-25M) -> +2 năm: Mid (25-40M). Tip: Làm project thực tế + đóng góp open source + network qua LinkedIn.",
         "software engineer": "Lộ trình Software Engineer:\nYear 1-2: Junior Dev (15-25M) -> Year 2-3: Mid Developer (25-40M) -> Year 3-5: Senior Dev (40-60M) -> Year 5+: Tech Lead / Architect (60-90M). Focus: fundamentals -> system design -> leadership. Popular stacks: MERN, Java Spring, .NET, Python Django.",
+        "backend developer": "Lộ trình Backend Developer:\nYear 1-2: Junior Backend (15-22M) → Year 2-3: Mid Backend (25-35M) → Year 3-5: Senior Backend (35-55M) → Year 5+: Backend Architect (55-80M). Core: REST APIs → Microservices → System Design. Stack: Java Spring, Node.js, Python Django, Go.",
+        "frontend developer": "Lộ trình Frontend Developer:\nYear 1-2: Junior Frontend (12-20M) → Year 2-3: Mid Frontend (22-35M) → Year 3-5: Senior Frontend (35-55M) → Year 5+: Frontend Architect (50-75M). Core: HTML/CSS → React/Vue → Performance → Design Systems.",
     }
     for key, val in paths.items():
         if key in current_role.lower():
