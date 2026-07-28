@@ -24,7 +24,8 @@ def parse_react_response(text: str):
     action_name = None
     action_args = None
     final_answer = None
-    for line in text.strip().split("\n"):
+    lines = text.strip().split("\n")
+    for i, line in enumerate(lines):
         line = line.strip()
         if line.lower().startswith("thought:"):
             thought = line.split(":", 1)[1].strip()
@@ -45,6 +46,9 @@ def parse_react_response(text: str):
                     action_args = [a.strip().strip("'\"") for a in raw_args.split(",")]
         elif line.lower().startswith("final answer:"):
             final_answer = line.split(":", 1)[1].strip()
+            # Capture all remaining lines after Final Answer
+            if i + 1 < len(lines):
+                final_answer += "\n" + "\n".join(lines[i + 1:])
             break
     if not final_answer and not action_name and thought:
         final_answer = text.strip()

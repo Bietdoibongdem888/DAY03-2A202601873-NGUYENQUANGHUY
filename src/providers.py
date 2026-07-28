@@ -96,7 +96,6 @@ class DeepSeekProvider(BaseLLMProvider):
             response = client.chat.completions.create(
                 model=self.model_name,
                 messages=messages,
-                max_tokens=2000,
             )
             return response.choices[0].message.content
         except Exception as e:
