@@ -99,15 +99,13 @@ def get_career_path(current_role: str) -> str:
 
 
 def web_search(query: str) -> str:
-    """
-    Tìm kiếm thông tin thực tế trên web cho bất kỳ câu hỏi nào.
-    """
+    """Tìm kiếm thông tin thực tế trên web."""
     try:
-        from duckduckgo_search import DDGS
+        from ddgs import DDGS
         results = list(DDGS().text(query, max_results=3))
         if not results:
-            return f"Không tìm thấy kết quả cho '{query}'."
-        return "\n".join(f"- {r['title']}: {r['body'][:200]}" for r in results)
+            return f"Không tìm thấy kết quả cho '{query}'. Hãy thử từ khóa khác hoặc thông báo cho người dùng."
+        return "\n".join(f"- {r['title']}: {r['body'][:250]}" for r in results)
     except Exception as e:
         return f"Lỗi tìm kiếm: {str(e)}"
 
