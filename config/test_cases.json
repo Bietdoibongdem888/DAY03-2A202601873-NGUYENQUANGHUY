@@ -2,31 +2,31 @@
   {
     "id": 1,
     "category": "🟢 Đơn giản (Chỉ cần LLM)",
-    "question": "Thủ đô của Việt Nam là gì?",
-    "expected_behavior": "Chatbot trả lời trực tiếp từ kiến thức có sẵn."
+    "question": "Ngành nào đang hot nhất hiện nay và phù hợp với sinh viên mới ra trường?",
+    "expected_behavior": "Chatbot trả lời từ kiến thức có sẵn, không cần gọi tool."
   },
   {
     "id": 2,
     "category": "🟢 Đơn giản (Chỉ cần LLM)",
-    "question": "Nêu 3 lời khuyên để học tốt lập trình.",
-    "expected_behavior": "Chatbot trả lời trực tiếp từ kiến thức có sẵn."
+    "question": "Nêu 3 lời khuyên để viết CV ấn tượng cho vị trí fresher.",
+    "expected_behavior": "Chatbot trả lời tư vấn dựa trên kiến thức có sẵn."
   },
   {
     "id": 3,
     "category": "🟡 Multi-step (Cần Tool)",
-    "question": "Thời tiết ở Hà Nội hôm nay thế nào và tôi nên mặc gì đi chơi?",
-    "expected_behavior": "Agent gọi tool get_weather('Hà Nội') rồi suy luận trang phục."
+    "question": "Thị trường việc làm ngành Data Science hiện nay ra sao và cần học những khóa học gì để bắt đầu?",
+    "expected_behavior": "Agent gọi get_job_market['Data Science'] rồi search_courses['Data Science'] hoặc Machine Learning."
   },
   {
     "id": 4,
-    "category": "🟡 Multi-step (Cần gọi 2 Tools)",
-    "question": "Kiểm tra vé máy bay từ TP.HCM đi Hà Nội ngày mai và dự báo thời tiết ở Hà Nội.",
-    "expected_behavior": "Agent gọi tool search_flights và get_weather để trả lời đầy đủ."
+    "category": "🟡 Multi-step (Cần 2+ Tools)",
+    "question": "Em biết Python và SQL, muốn trở thành Data Scientist. Kỹ năng em còn thiếu gì và lộ trình thăng tiến từ fresher như thế nào?",
+    "expected_behavior": "Agent gọi check_skills và get_career_path để trả lời toàn diện."
   },
   {
     "id": 5,
     "category": "🔴 Edge Case (Bẫy Guardrail)",
-    "question": "Tra cứu thời tiết ở thành phố Atlantis ngày 32/13/2026.",
-    "expected_behavior": "Tool báo lỗi tham số/thất bại, Guardrail ngắt sau 3 bước và trả về thông báo lịch sự."
+    "question": "Tra cứu thị trường việc làm ở thành phố Atlantis cho nghề Phù Thủy Cấp Cao năm 3026.",
+    "expected_behavior": "Tool báo lỗi không tìm thấy dữ liệu. Guardrail ngắt sau 3 bước và trả về thông báo lịch sự."
   }
 ]

@@ -132,12 +132,71 @@ class OpenRouterProvider(BaseLLMProvider):
 
 
 class MockProvider(BaseLLMProvider):
-    """Offline Mock Provider (Cho bài test không cần kết nối API)"""
+    """Offline Mock Provider — simulates ReAct Agent thought patterns."""
     def generate(self, prompt: str, system_prompt: str = "") -> str:
-        text = prompt.lower()
-        if "thời tiết" in text and "hà nội" in text:
-            return "Thought: Cần tra cứu thời tiết Hà Nội.\nAction: get_weather['Hà Nội']"
-        return "🤖 [Mock Provider]: Phản hồi giả lập offline cho bài test."
+        text = prompt
+
+        # Detect if this is a follow-up call (has observation from previous tool execution)
+        has_obs = "Observation:" in text or "observation:" in text
+
+        if has_obs:
+            text_lower = text.lower()
+
+            # After get_job_market for Data Science + course question
+            if "data science" in text_lower and "search_courses" not in text_lower:
+                return "Thought: Da co thong tin thi truong. Tiep theo can goi y khoa hoc.\nAction: search_courses['Machine Learning']"
+
+            # After check_skills -> need career path too
+            if "check_skills" in text_lower and "get_career_path" not in text_lower:
+                return "Thought: Da co ket qua ky nang. Can them lo trinh.\nAction: get_career_path['fresher']"
+
+            # Got tools results -> final answer
+            if "get_job_market" in text_lower or "check_skills" in text_lower or "get_career_path" in text_lower:
+                return "Thought: Da co du thong tin. Toi se tong hop cau tra loi.\nFinal Answer: Dua tren du lieu da tra cuu: nganh Data Science co muc luong 25-40M Junior, nhu cau tang 35%/nam. Voi Python va SQL ban can bo sung them ML, Statistics. Lo trinh: Fresher (8-12M) -> Junior (15-25M) -> Mid (25-40M). Hay bat dau voi khoa Andrew Ng ML tren Coursera!"
+
+            # Edge case - tool returned error
+            if "chưa có dữ liệu" in text_lower or "không tìm thấy" in text_lower:
+                return "Thought: Tool khong co du lieu cho yeu cau nay.\nFinal Answer: Xin loi, toi khong tim thay thong tin cho yeu cau cua ban. Vui long thu lai voi tu khoa cu the hon!"
+
+            return "Thought: Da co du thong tin.\nFinal Answer: Day la cau tra loi dua tren du lieu da tra cuu. Chuc ban thanh cong!"
+
+        # --- First call — no observation yet ---
+        text_lower = text.lower()
+
+        # Career market queries
+        if ("thị trường" in text_lower or "ngành" in text_lower) and ("data" in text_lower):
+            if "khóa" in text_lower or "học" in text_lower:
+                return "Thought: Nguoi dung muon biet thi truong + khoa hoc Data Science. Bat dau voi thi truong.\nAction: get_job_market['Data Science']"
+            return "Thought: Nguoi dung muon biet thong tin thi truong Data Science. Can goi tool tra cuu.\nAction: get_job_market['Data Science']"
+        if "thị trường" in text_lower and ("ai" in text_lower or "trí tuệ" in text_lower):
+            return "Thought: Can tra cuu thi truong AI.\nAction: get_job_market['Artificial Intelligence']"
+        if "thị trường" in text_lower and ("software" in text_lower or "phần mềm" in text_lower):
+            return "Thought: Can tra cuu thi truong Software Engineering.\nAction: get_job_market['Software Engineering']"
+
+        # Skill matching
+        if ("kỹ năng" in text_lower or "thiếu" in text_lower) and ("biết" in text_lower or "có" in text_lower) and ("python" in text_lower or "sql" in text_lower):
+            if "lộ trình" in text_lower or "thăng tiến" in text_lower:
+                return "Thought: Nguoi dung muon ca doi chieu ky nang va lo trinh. Bat dau voi kiem tra ky nang.\nAction: check_skills['Python, SQL', 'Data Scientist']"
+            return "Thought: Nguoi dung muon doi chieu ky nang. Can goi tool.\nAction: check_skills['Python, SQL', 'Data Scientist']"
+
+        # Course search
+        if "khóa" in text_lower or "course" in text_lower:
+            if "machine learning" in text_lower or "ml" in text_lower:
+                return "Thought: Nguoi dung muon tim khoa hoc Machine Learning.\nAction: search_courses['Machine Learning']"
+            return "Thought: Can tim khoa hoc phu hop.\nAction: search_courses['Machine Learning']"
+
+        # Career path
+        if "lộ trình" in text_lower or "thăng tiến" in text_lower:
+            if "fresher" in text_lower or "sinh viên" in text_lower:
+                return "Thought: Can tra cuu lo trinh tu Fresher.\nAction: get_career_path['fresher']"
+            return "Thought: Can tra cuu lo trinh thang tien.\nAction: get_career_path['fresher']"
+
+        # Edge case: nonsense queries
+        if "atlantis" in text_lower or "phù thủy" in text_lower:
+            return "Thought: Nguoi dung hoi ve mot dia danh/nghe nghiep khong co that. Can goi tool de xac nhan.\nAction: get_job_market['Atlantis']"
+
+        # Generic fallback — simple questions don't need tools
+        return "Thought: Nguoi dung hoi cau hoi tu van chung, khong can goi tool.\nFinal Answer: Chao ban! Toi la Chatbot Dinh Huong Su Nghiep. Toi co the giup ban: (1) Tra cuu thi truong viec lam theo nganh, (2) Doi chieu ky nang voi yeu cau tuyen dung, (3) Goi y khoa hoc/chung chi, (4) Ve lo trinh thang tien. Hay cho toi biet ban dang quan tam den linh vuc nao nhe!"
 
 
 def get_llm_provider(provider_name: str = None) -> BaseLLMProvider:
