@@ -157,7 +157,7 @@ HTML_TEMPLATE = r"""
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Calibri', 'Segoe UI', Tahoma, sans-serif;
             background: #0f172a; color: #e2e8f0;
             display: flex; height: 100vh;
         }
@@ -197,7 +197,7 @@ HTML_TEMPLATE = r"""
             color: #e2e8f0; font-size: 14px; outline: none;
         }
         .input-area input:focus { border-color: #38bdf8; }
-        .msg { padding: 14px 18px; border-radius: 12px; max-width: 85%; font-size: 14px; line-height: 1.6; animation: fadeIn 0.3s; }
+        .msg { padding: 14px 18px; border-radius: 12px; max-width: 85%; font-size: 14px; line-height: 1.6; animation: fadeIn 0.3s; white-space: pre-wrap; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         .msg.user { background: #38bdf8; color: #0f172a; align-self: flex-end; font-weight: 500; }
         .msg.agent { background: #ea580c22; border: 1px solid #ea580c44; align-self: flex-start; }
@@ -209,7 +209,7 @@ HTML_TEMPLATE = r"""
         .step-box {
             background: #0f172a; border: 1px solid #334155;
             border-radius: 8px; padding: 10px 14px; margin: 6px 0;
-            font-size: 12px; font-family: 'Consolas', monospace;
+            font-size: 12px; font-family: 'Consolas', monospace; white-space: pre-wrap;
         }
         .step-box .s { color: #4ade80; } .step-box .t { color: #facc15; }
         .step-box .a { color: #38bdf8; } .step-box .o { color: #c084fc; }
