@@ -104,18 +104,18 @@ def chat():
             }
 
             if final_answer and action_name:
-        # LLM gave both Action + Final Answer — execute action first, defer final
-        deferred = final_answer
-        step_data["thought"] = thought
-        step_data["action"] = f"{action_name}{action_args}"
-        obs = execute_tool(action_name, action_args)
-        step_data["observation"] = obs
-        messages += f"\nAssistant: {resp}"
-        messages += f"\nObservation: {obs}"
-        messages += f"\nYou already prepared this answer:\n{deferred}"
-        messages += "\nJust output: Final Answer: [your answer]\nDo NOT call more actions."
-        steps.append(step_data)
-        continue
+                # LLM gave both Action + Final Answer — execute action first, defer final
+                deferred = final_answer
+                step_data["thought"] = thought
+                step_data["action"] = f"{action_name}{action_args}"
+                obs = execute_tool(action_name, action_args)
+                step_data["observation"] = obs
+                messages += f"\nAssistant: {resp}"
+                messages += f"\nObservation: {obs}"
+                messages += f"\nYou already prepared this answer:\n{deferred}"
+                messages += "\nJust output: Final Answer: [your answer]\nDo NOT call more actions."
+                steps.append(step_data)
+                continue
 
     if final_answer:
                 step_data["final"] = final_answer
