@@ -66,8 +66,15 @@ def parse_react_response(text: str):
             if m:
                 action_name = m.group(1)
                 raw_args = m.group(2)
-                # Split by comma, strip quotes
-                args = [a.strip().strip("'\"") for a in raw_args.split(",")]
+                # Split by comma, but respect quoted strings
+                import csv, io
+                try:
+                    reader = csv.reader(io.StringIO(raw_args), quotechar="'", skipinitialspace=True)
+                    args = next(reader)
+                    if not args:
+                        args = [a.strip().strip("'\"") for a in raw_args.split(",")]
+                except Exception:
+                    args = [a.strip().strip("'\"") for a in raw_args.split(",")]
                 action_args = args
         elif line.lower().startswith("final answer:"):
             final_answer = line.split(":", 1)[1].strip()
