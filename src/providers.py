@@ -39,7 +39,8 @@ class GeminiProvider(BaseLLMProvider):
             contents = f"{system_prompt}\n\n{prompt}" if system_prompt else prompt
             response = client.models.generate_content(
                 model=self.model_name,
-                contents=contents
+                contents=contents,
+                config={"max_output_tokens": 1000},
             )
             return response.text
         except Exception as e:
@@ -65,7 +66,8 @@ class OpenAIProvider(BaseLLMProvider):
             
             response = client.chat.completions.create(
                 model=self.model_name,
-                messages=messages
+                messages=messages,
+                max_tokens=1000,
             )
             return response.choices[0].message.content
         except Exception as e:
@@ -94,6 +96,7 @@ class DeepSeekProvider(BaseLLMProvider):
             response = client.chat.completions.create(
                 model=self.model_name,
                 messages=messages,
+                max_tokens=1000,
             )
             return response.choices[0].message.content
         except Exception as e:
