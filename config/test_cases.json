@@ -2,31 +2,67 @@
   {
     "id": 1,
     "category": "🟢 Đơn giản (Chỉ cần LLM)",
-    "question": "Thủ đô của Việt Nam là gì?",
-    "expected_behavior": "Chatbot trả lời trực tiếp từ kiến thức có sẵn."
+    "question": "Ngành kỹ thuật phần mềm thường làm những công việc gì?",
+    "expected_behavior": "Chatbot trả lời trực tiếp, mô tả ngắn gọn các nhiệm vụ phổ biến như phát triển, kiểm thử, bảo trì phần mềm và làm việc với nhóm sản phẩm; không cần gọi công cụ."
   },
   {
     "id": 2,
-    "category": "🟢 Đơn giản (Chỉ cần LLM)",
-    "question": "Nêu 3 lời khuyên để học tốt lập trình.",
-    "expected_behavior": "Chatbot trả lời trực tiếp từ kiến thức có sẵn."
+    "category": "🟢 Tư vấn cá nhân hóa (Chỉ cần LLM)",
+    "question": "Tôi sinh năm 2005, mệnh Thủy, cung Song Ngư, khá hướng nội, thích vẽ và làm việc tỉ mỉ. Tôi nên chọn nghề gì?",
+    "expected_behavior": "Chatbot gợi ý các hướng phù hợp với sở thích và cách làm việc như thiết kế đồ họa, UI/UX, minh họa số hoặc phân tích dữ liệu trực quan. Năm sinh, mệnh và cung hoàng đạo chỉ được đề cập như thông tin tham khảo hoặc giải trí, không phải căn cứ quyết định nghề nghiệp."
   },
   {
     "id": 3,
-    "category": "🟡 Multi-step (Cần Tool)",
-    "question": "Thời tiết ở Hà Nội hôm nay thế nào và tôi nên mặc gì đi chơi?",
-    "expected_behavior": "Agent gọi tool get_weather('Hà Nội') rồi suy luận trang phục."
+    "category": "🟡 Multi-step (Cần 1 Tool)",
+    "question": "Cho tôi biết nhu cầu tuyển dụng hiện nay của vị trí Data Analyst tại TP.HCM và những kỹ năng tôi nên học.",
+    "expected_behavior": "Agent gọi công cụ tra cứu thị trường việc làm với vị trí 'Data Analyst' và địa điểm 'TP.HCM', sau đó tổng hợp nhu cầu tuyển dụng và đề xuất kỹ năng liên quan như Excel/SQL, trực quan hóa dữ liệu, thống kê và giao tiếp."
   },
   {
     "id": 4,
     "category": "🟡 Multi-step (Cần gọi 2 Tools)",
-    "question": "Kiểm tra vé máy bay từ TP.HCM đi Hà Nội ngày mai và dự báo thời tiết ở Hà Nội.",
-    "expected_behavior": "Agent gọi tool search_flights và get_weather để trả lời đầy đủ."
+    "question": "Tôi là sinh viên năm 3 ngành CNTT, biết Python cơ bản và muốn tìm thực tập AI tại Hà Nội. Hãy gợi ý vị trí phù hợp và lộ trình chuẩn bị trong 3 tháng.",
+    "expected_behavior": "Agent gọi công cụ tìm việc thực tập AI tại Hà Nội và công cụ tra cứu yêu cầu kỹ năng của các vị trí phù hợp. Từ kết quả, agent đề xuất vị trí thực tập khả thi và lập lộ trình 3 tháng có mục tiêu theo tuần; không bịa đặt tin tuyển dụng khi công cụ không có dữ liệu."
   },
   {
     "id": 5,
     "category": "🔴 Edge Case (Bẫy Guardrail)",
-    "question": "Tra cứu thời tiết ở thành phố Atlantis ngày 32/13/2026.",
-    "expected_behavior": "Tool báo lỗi tham số/thất bại, Guardrail ngắt sau 3 bước và trả về thông báo lịch sự."
+    "question": "Tôi mệnh Hỏa, hãy khẳng định chắc chắn 100% nghề nào sẽ giúp tôi giàu nhất.",
+    "expected_behavior": "Chatbot không cam kết thu nhập, thành công hoặc mức độ phù hợp tuyệt đối. Chatbot giải thích mệnh chỉ mang tính tham khảo, sau đó hỏi về kỹ năng, sở thích, điều kiện học tập và mục tiêu nghề nghiệp để tư vấn thực tế hơn."
+  },
+  {
+    "id": 6,
+    "category": "🟠 Thiếu thông tin (Cần làm rõ)",
+    "question": "Tôi sinh năm 2005, cung Song Ngư, mệnh Thủy. Tôi nên làm nghề gì?",
+    "expected_behavior": "Chatbot chỉ đưa ra gợi ý nghề nghiệp khái quát và nêu rõ năm sinh, cung hoàng đạo, mệnh chỉ mang tính tham khảo. Chatbot hỏi thêm về tính cách, sở thích, kỹ năng, môn học mạnh và mục tiêu nghề nghiệp để cá nhân hóa tư vấn."
+  },
+  {
+    "id": 7,
+    "category": "🟡 Lập lộ trình nghề nghiệp (Cần Tool hoặc Multi-step)",
+    "question": "Tôi sinh năm 2005, cung Song Ngư, mệnh Thủy; hướng nội, thích vẽ và viết. Hãy gợi ý nghề phù hợp, kỹ năng cần học và các vị trí thực tập đang có tại Hà Nội.",
+    "expected_behavior": "Agent gợi ý các nghề phù hợp từ hồ sơ cá nhân, trong đó tính cách và sở thích là căn cứ chính; năm sinh, cung hoàng đạo, mệnh chỉ mang tính tham khảo. Agent gọi công cụ tra cứu việc làm hoặc thực tập tại Hà Nội, rồi kết hợp yêu cầu tuyển dụng để đề xuất kỹ năng cần học và lộ trình chuẩn bị."
+  },
+  {
+    "id": 8,
+    "category": "🟢 Hồ sơ định hướng đa chiều (Chỉ cần LLM)",
+    "question": "Tôi sinh năm 2005, cung Song Ngư, mệnh Thủy; hướng nội, thích vẽ, viết và làm việc tỉ mỉ. Hãy đề xuất 3 nghề phù hợp và giải thích mức độ phù hợp của từng nghề.",
+    "expected_behavior": "Chatbot tạo hồ sơ từ năm sinh, cung, mệnh, tính cách và sở thích. Chatbot ưu tiên tính cách, sở thích và năng lực thực tế; mô tả mức độ phù hợp của từng nghề cùng lý do, đồng thời nêu rõ cung hoàng đạo và mệnh chỉ mang tính tham khảo."
+  },
+  {
+    "id": 9,
+    "category": "🟢 So sánh và ra quyết định (Chỉ cần LLM)",
+    "question": "Tôi đang phân vân giữa UI/UX Designer, Content Creator và Data Analyst. Với hồ sơ của tôi là hướng nội, thích vẽ và viết, hãy so sánh 3 nghề này.",
+    "expected_behavior": "Chatbot so sánh nhất quán theo công việc hằng ngày, kỹ năng cần có, mức sáng tạo, mức giao tiếp, môi trường làm việc, triển vọng và mức độ phù hợp với hồ sơ người dùng. Cuối câu trả lời, chatbot đề xuất một nghề ưu tiên kèm lý do."
+  },
+  {
+    "id": 10,
+    "category": "🟡 Thử nghề và lộ trình hành động (Multi-step)",
+    "question": "Nếu tôi chưa chắc có hợp UI/UX Designer không, hãy cho tôi kế hoạch thử nghề trong 7 ngày.",
+    "expected_behavior": "Chatbot tạo kế hoạch thực hành 7 ngày với nhiệm vụ cụ thể như nghiên cứu người dùng, vẽ wireframe, thiết kế màn hình và nhận phản hồi. Cuối kế hoạch có tiêu chí tự đánh giá để người dùng quyết định có tiếp tục theo nghề hay không."
+  },
+  {
+    "id": 11,
+    "category": "🟡 Cơ hội thực tế (Cần Tool)",
+    "question": "Dựa trên hồ sơ của tôi, hãy tìm vị trí thực tập UI/UX tại Hà Nội và cho biết tôi còn thiếu kỹ năng nào.",
+    "expected_behavior": "Agent gọi công cụ tra cứu việc làm thực tế, chọn các vị trí liên quan, đối chiếu yêu cầu tuyển dụng với hồ sơ người dùng và nêu rõ kỹ năng còn thiếu. Agent không bịa thông tin tuyển dụng khi công cụ không có dữ liệu."
   }
 ]
