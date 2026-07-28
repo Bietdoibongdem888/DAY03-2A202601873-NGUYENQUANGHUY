@@ -44,5 +44,5 @@ BẮT ĐẦU:
 """
 
 # 🛡️ GUARDRAILS (Phanh an toàn)
-MAX_ITERATIONS = 5  # Tối đa 5 vòng lặp Thought-Action
+MAX_ITERATIONS = 7  # Tối đa 7 vòng lặp Thought-Action
 TIMEOUT_SECONDS = 15  # Timeout mỗi lần gọi tool

@@ -16,6 +16,7 @@ def get_job_market(field: str) -> str:
         "cybersecurity": "Cybersecurity: Lương TB 25-40M VND/tháng (Junior), 50-90M (Senior). Nhu cầu tăng 30%/năm. Top skills: Network Security, Ethical Hacking, Cloud Security.",
         "product management": "Product Management: Lương TB 30-45M VND/tháng (Mid), 60-90M (Senior). Nhu cầu tăng 20%/năm. Top skills: UX Research, Data Analysis, Stakeholder Management.",
         "ui/ux design": "UI/UX Design: Lương TB 20-30M VND/tháng (Junior), 40-60M (Senior). Nhu cầu tăng 25%/năm. Top skills: Figma, User Research, Prototyping.",
+        "software engineering": "Software Engineering: Lương TB 20-35M VND/tháng (Junior), 45-70M (Senior). Nhu cầu ổn định. Top skills: Java, Python, Cloud, System Design. Top companies: FPT, VNG, Momo, VNPay. Career paths: Backend, Frontend, Fullstack, DevOps, Mobile.",
     }
     for key, val in data.items():
         if key in field.lower():
@@ -68,6 +69,7 @@ def search_courses(field: str) -> str:
         "web development": "Khóa học Web Dev:\n1. The Odin Project — 6-12 tháng, FREE\n2. Full Stack Open (Helsinki Uni) — 3 tháng, FREE\n3. freeCodeCamp — tự học, FREE",
         "cybersecurity": "Khóa học Cybersecurity:\n1. Google Cybersecurity Certificate (Coursera) — 6 tháng, ~$39/tháng\n2. CompTIA Security+ — tự học + thi ~$370\n3. TryHackMe — hands-on, FREE tier available",
         "cloud computing": "Khóa học Cloud:\n1. AWS Cloud Practitioner — 1 tháng, FREE training + thi $100\n2. Google Cloud Skills Boost — FREE tier\n3. Azure Fundamentals AZ-900 — FREE learning path",
+        "software engineering": "Khóa học Software Engineering:\n1. The Odin Project — 6-12 tháng, FREE\n2. Full Stack Open (Helsinki Uni) — 3 tháng, FREE\n3. CS50 (Harvard) — 12 tuần, FREE\n4. Clean Code (Udemy) — ~$15 khi sale",
     }
     for key, val in courses.items():
         if key in field.lower():
@@ -86,6 +88,7 @@ def get_career_path(current_role: str) -> str:
         "data analyst": "Lộ trình Data Analyst:\nYear 1-2: Junior Analyst (15-20M) -> Year 2-3: Data Analyst (20-30M) -> Year 3-5: Senior Analyst / BI Lead (30-45M) -> Year 5+: Data Scientist / Analytics Manager (45-70M). Focus: SQL -> Python -> ML -> Strategy.",
         "fresher": "Lộ trình từ Fresher:\nYear 1: Fresher/Trainee (8-12M) -> Year 1-2: Junior (15-25M) -> Year 2-4: Mid-level (25-40M) -> Year 4-6: Senior (40-60M) -> Year 6+: Lead/Manager (60M+). Tip: Chọn 1 chuyên môn + 1 domain để đi sâu.",
         "student": "Lộ trình từ Sinh viên:\nNăm 3-4: Thực tập (3-6M) -> Tốt nghiệp: Fresher (8-12M) -> +1 năm: Junior (15-25M) -> +2 năm: Mid (25-40M). Tip: Làm project thực tế + đóng góp open source + network qua LinkedIn.",
+        "software engineer": "Lộ trình Software Engineer:\nYear 1-2: Junior Dev (15-25M) -> Year 2-3: Mid Developer (25-40M) -> Year 3-5: Senior Dev (40-60M) -> Year 5+: Tech Lead / Architect (60-90M). Focus: fundamentals -> system design -> leadership. Popular stacks: MERN, Java Spring, .NET, Python Django.",
     }
     for key, val in paths.items():
         if key in current_role.lower():
