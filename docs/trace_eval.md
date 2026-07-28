@@ -7,11 +7,11 @@
 
 | Tiêu chí | Điểm (1-5) | Lý do đánh giá |
 | :--- | :---: | :--- |
-| 🧠 **Multi-step Reasoning** | `4/5` | Cần suy luận từ tra cứu thời tiết đến chọn trang phục. |
-| 🛠️ **Tool Interaction** | `5/5` | Cần tra cứu dữ liệu thời gian thực qua API thời tiết/chuyến bay. |
-| 🔀 **Dynamic Decision** | `4/5` | Kết quả bước trước quyết định hành động bước sau. |
-| ⏳ **Long Horizon** | `3/5` | Quy trình gồm 2-3 bước xử lý ngắn. |
-| **TỔNG ĐIỂM FIT** | **16/20** | **KẾT LUẬN: BÀI TOÁN RẤT NÊN DÙNG REACT AGENT!** |
+| 🧠 **Multi-step Reasoning** | `5/5` | Câu hỏi về định hướng sự nghiệp thường cần nối nhiều bước: hiểu nhu cầu người dùng, tra cứu xu hướng nghề nghiệp, rồi đề xuất lộ trình học tập. |
+| 🛠️ **Tool Interaction** | `5/5` | Đây là bài toán rất phù hợp để dùng công cụ như `get_career_info`, `suggest_careers_by_interest`, `search_jobs_by_career`, `get_certification_info` hoặc `compare_careers` để có thông tin cập nhật. |
+| 🔀 **Dynamic Decision** | `4/5` | Kết quả bước đầu quyết định bước tiếp theo, ví dụ từ sở thích người dùng suy ra nghề phù hợp và lộ trình học. |
+| ⏳ **Long Horizon** | `4/5` | Quy trình này có thể kéo dài qua nhiều bước: phân tích sở thích → đề xuất nghề → gợi ý kỹ năng → cấu trúc kế hoạch. |
+| **TỔNG ĐIỂM FIT** | **18/20** | **KẾT LUẬN: Bài toán Chatbot Định Hướng Sự Nghiệp rất phù hợp để dùng ReAct Agent.** |
 
 ---
 
