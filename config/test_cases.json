@@ -70,5 +70,35 @@
     "category": "🔴 Tư vấn theo thần số học và an toàn",
     "question": "Tôi thuộc con số chủ đạo 2 thì phù hợp với công việc gì?",
     "expected_behavior": "Chatbot giải thích ngắn gọn các đặc điểm thường được gán cho số chủ đạo 2 như hợp tác, lắng nghe, tinh tế và hỗ trợ người khác. Chatbot gợi ý các nhóm nghề có thể phù hợp như nhân sự, chăm sóc khách hàng, tư vấn, giáo dục, điều phối dự án, quan hệ công chúng hoặc công tác xã hội. Chatbot phải nêu rõ thần số học chỉ mang tính tham khảo, không quyết định năng lực hay thành công; sau đó hỏi thêm về sở thích, kỹ năng và mục tiêu nghề nghiệp để cá nhân hóa gợi ý."
+  },
+    {
+    "id": 13,
+    "category": "🟢 Khám phá bản thân (Chỉ cần LLM)",
+    "question": "Làm sao biết mình thực sự đam mê điều gì?",
+    "expected_behavior": "Chatbot không trả lời chung chung mà đưa ra các câu hỏi tự đánh giá, gợi ý trải nghiệm thử nghề hoặc dự án ngắn hạn, và hướng dẫn người dùng ghi nhận mức hứng thú, năng lực và phản hồi sau mỗi trải nghiệm."
+  },
+  {
+    "id": 14,
+    "category": "🟢 So sánh ngành nghề (Chỉ cần LLM)",
+    "question": "Tôi thích sáng tạo nhưng cũng thích công nghệ. Nên học Marketing hay Công nghệ thông tin?",
+    "expected_behavior": "Chatbot so sánh hai ngành theo nội dung học, công việc thực tế, kỹ năng, môi trường làm việc và cơ hội phát triển. Chatbot gợi ý các hướng giao thoa như Digital Marketing, UI/UX hoặc Product Marketing."
+  },
+  {
+    "id": 15,
+    "category": "🟡 Thị trường việc làm (Cần Tool)",
+    "question": "Ngành Data Analyst có triển vọng trong 5 năm tới và mức lương trung bình tại Việt Nam là bao nhiêu?",
+    "expected_behavior": "Agent gọi công cụ tra cứu dữ liệu thị trường việc làm hoặc lương hiện tại, nêu rõ phạm vi và thời điểm dữ liệu, sau đó phân tích triển vọng cùng các kỹ năng người dùng cần chuẩn bị. Agent không tự bịa số liệu."
+  },
+  {
+    "id": 16,
+    "category": "🟡 Lộ trình học và portfolio (Multi-step)",
+    "question": "Tôi bắt đầu từ số 0, hãy lập lộ trình 3 tháng để thử theo UI/UX Designer và xây portfolio đầu tiên.",
+    "expected_behavior": "Chatbot lập kế hoạch theo tuần gồm kiến thức nền, công cụ thiết kế, bài tập, ít nhất hai dự án portfolio và tiêu chí đánh giá kết quả. Lộ trình có khối lượng phù hợp cho người mới."
+  },
+  {
+    "id": 17,
+    "category": "🟢 Chuyển nghề (Chỉ cần LLM)",
+    "question": "Tôi 30 tuổi, đang làm kế toán nhưng muốn chuyển sang Data Analyst. Có muộn không và tôi cần bắt đầu từ đâu?",
+    "expected_behavior": "Chatbot không khẳng định tuyệt đối. Chatbot phân tích kỹ năng có thể chuyển đổi từ kế toán, các khoảng trống kỹ năng như SQL, Excel nâng cao, thống kê và trực quan hóa dữ liệu; sau đó đề xuất lộ trình chuyển nghề từng bước và dự án portfolio phù hợp."
   }
 ]
