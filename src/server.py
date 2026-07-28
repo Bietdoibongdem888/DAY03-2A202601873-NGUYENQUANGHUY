@@ -112,12 +112,12 @@ def chat():
                 step_data["observation"] = obs
                 messages += f"\nAssistant: {resp}"
                 messages += f"\nObservation: {obs}"
-                messages += f"\nYou already prepared this answer:\n{deferred}"
-                messages += "\nJust output: Final Answer: [your answer]\nDo NOT call more actions."
+                messages += f"\nYou prepared this answer:\n{deferred}"
+                messages += "\nJust output: Final Answer: [answer]\nNo more actions."
                 steps.append(step_data)
                 continue
 
-    if final_answer:
+            if final_answer:
                 step_data["final"] = final_answer
                 steps.append(step_data)
                 final = final_answer
