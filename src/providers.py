@@ -40,7 +40,7 @@ class GeminiProvider(BaseLLMProvider):
             response = client.models.generate_content(
                 model=self.model_name,
                 contents=contents,
-                config={"max_output_tokens": 1000},
+                config={"max_output_tokens": 2000},
             )
             return response.text
         except Exception as e:
@@ -67,7 +67,7 @@ class OpenAIProvider(BaseLLMProvider):
             response = client.chat.completions.create(
                 model=self.model_name,
                 messages=messages,
-                max_tokens=1000,
+                max_tokens=2000,
             )
             return response.choices[0].message.content
         except Exception as e:
@@ -96,7 +96,7 @@ class DeepSeekProvider(BaseLLMProvider):
             response = client.chat.completions.create(
                 model=self.model_name,
                 messages=messages,
-                max_tokens=1000,
+                max_tokens=2000,
             )
             return response.choices[0].message.content
         except Exception as e:
