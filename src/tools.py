@@ -98,6 +98,20 @@ def get_career_path(current_role: str) -> str:
     return f"Chưa có lộ trình cụ thể cho '{current_role}'. Gợi ý: Junior Developer, Data Analyst, Fresher, Student."
 
 
+def web_search(query: str) -> str:
+    """
+    Tìm kiếm thông tin thực tế trên web cho bất kỳ câu hỏi nào.
+    """
+    try:
+        from duckduckgo_search import DDGS
+        results = list(DDGS().text(query, max_results=3))
+        if not results:
+            return f"Không tìm thấy kết quả cho '{query}'."
+        return "\n".join(f"- {r['title']}: {r['body'][:200]}" for r in results)
+    except Exception as e:
+        return f"Lỗi tìm kiếm: {str(e)}"
+
+
 AVAILABLE_TOOLS = {
     "get_job_market": get_job_market,
     "check_skills": check_skills,
@@ -105,21 +119,3 @@ AVAILABLE_TOOLS = {
     "get_career_path": get_career_path,
     "web_search": web_search,
 }
-
-def web_search(query: str) -> str:
-    """
-    Tìm kiếm thông tin thực tế trên web cho bất kỳ câu hỏi nào.
-    Args: query (str): Từ khóa tìm kiếm
-    Returns: str: Kết quả tìm kiếm
-    """
-    try:
-        from duckduckgo_search import DDGS
-        results = list(DDGS().text(query, max_results=3))
-        if not results:
-            return f"Không tìm thấy kết quả cho '{query}'."
-        output = []
-        for r in results:
-            output.append(f"- {r['title']}: {r['body'][:200]}")
-        return "\n".join(output)
-    except Exception as e:
-        return f"Lỗi tìm kiếm: {str(e)}"
