@@ -1,5 +1,14 @@
 # 🏫 BÀI LAB 3: CHATBOT VS REACT AGENT - TỪ Ý TƯỞNG ĐẾN THỰC THI
 
+| STT | Họ và tên | Mã học viên | Vai trò trong nhóm |
+|-----|-----------|-------------|---------------------|
+| 1   | Vũ Quang Tùng |  2A202601545 | nhóm trưởng |
+| 2   | Trần Tuấn Trung |  2A202601769 | thành viên |
+| 3   | Nguyễn Quang Huy |  2A202601873 | thành viên |
+| 4   | Diêm Công Thành |  2A202601689 | thành viên |
+| 5   | Nguyễn Quốc Việt |  2A202601737 | thành viên |
+| 6   | Chu Thị Yến Khanh |  2A202601739 | thành viên |
+
 ---
 
 ### 💡 1. LỜI NÓI ĐẦU & NỀN TẢNG LÝ THUYẾT (4 CẤP ĐỘ AI HỘI THOẠI)
