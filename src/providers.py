@@ -72,6 +72,34 @@ class OpenAIProvider(BaseLLMProvider):
             return f"[OpenAI Exception]: {str(e)}"
 
 
+class DeepSeekProvider(BaseLLMProvider):
+    """DeepSeek Provider (deepseek-chat, deepseek-reasoner) — OpenAI-compatible API."""
+    def __init__(self, api_key: str = None, model: str = None):
+        self.api_key = api_key or os.getenv("DEEPSEEK_API_KEY")
+        self.model_name = model or os.getenv("LLM_MODEL") or "deepseek-chat"
+
+    def generate(self, prompt: str, system_prompt: str = "") -> str:
+        if not self.api_key:
+            return "[DeepSeek Error]: Chưa cấu hình DEEPSEEK_API_KEY trong file .env!"
+        try:
+            import openai
+            client = openai.OpenAI(
+                api_key=self.api_key,
+                base_url="https://api.deepseek.com",
+            )
+            messages = []
+            if system_prompt:
+                messages.append({"role": "system", "content": system_prompt})
+            messages.append({"role": "user", "content": prompt})
+            response = client.chat.completions.create(
+                model=self.model_name,
+                messages=messages,
+            )
+            return response.choices[0].message.content
+        except Exception as e:
+            return f"[DeepSeek Exception]: {str(e)}"
+
+
 class AnthropicProvider(BaseLLMProvider):
     """Anthropic Claude Provider (Claude 3.5 Sonnet, Claude 3 Haiku)"""
     def __init__(self, api_key: str = None, model: str = None):
@@ -207,6 +235,8 @@ def get_llm_provider(provider_name: str = None) -> BaseLLMProvider:
         return GeminiProvider()
     elif name == "openai":
         return OpenAIProvider()
+    elif name == "deepseek":
+        return DeepSeekProvider()
     elif name == "anthropic":
         return AnthropicProvider()
     elif name == "openrouter":
