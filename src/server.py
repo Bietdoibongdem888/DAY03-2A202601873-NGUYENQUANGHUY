@@ -9,7 +9,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from flask import Flask, render_template_string, request, jsonify
 from flask_cors import CORS
 from providers import get_llm_provider
-from prompts import CHATBOT_BASELINE_PROMPT, REACT_SYSTEM_PROMPT, MAX_ITERATIONS
+from prompts import CHATBOT_BASELINE_PROMPT, REACT_SYSTEM_PROMPT
 from tools import AVAILABLE_TOOLS
 from dotenv import load_dotenv
 load_dotenv()
@@ -69,7 +69,8 @@ def index():
 def chat():
     data = request.json
     query = data.get("query", "")
-    mode = data.get("mode", "chatbot")  # chatbot or agent
+    mode = data.get("mode", "chatbot")
+    max_iters = int(data.get("max_iterations", 5))  # from slider
 
     if mode == "chatbot":
         try:
@@ -78,12 +79,12 @@ def chat():
         except Exception as e:
             return jsonify({"type": "chatbot", "error": str(e)}), 500
 
-    else:  # agent mode
+    else:
         steps = []
         messages = REACT_SYSTEM_PROMPT + f"\nUser question: {query}"
         final = None
 
-        for step in range(1, MAX_ITERATIONS + 1):
+        for step in range(1, max_iters + 1):
             try:
                 resp = provider.generate(messages, system_prompt="")
             except Exception as e:
@@ -118,7 +119,7 @@ def chat():
                 break
 
         if not final:
-            steps.append({"step": MAX_ITERATIONS, "final": "GUARDRAIL: Reached max iterations."})
+            steps.append({"step": max_iters, "final": f"GUARDRAIL: Reached max {max_iters} iterations."})
 
         return jsonify({
             "type": "agent",
@@ -214,6 +215,14 @@ HTML_TEMPLATE = r"""
     <button class="btn btn-chatbot" onclick="setMode('both')">
         ⚡ Compare Both
     </button>
+    <h2 style="margin-top:16px">GUARDRAIL ITERATIONS</h2>
+    <div style="display:flex;align-items:center;gap:10px">
+        <input type="range" id="iterSlider" min="1" max="15" value="5"
+               oninput="document.getElementById('iterVal').textContent=this.value"
+               style="flex:1">
+        <span id="iterVal" style="color:#38bdf8;font-weight:700;min-width:20px">5</span>
+    </div>
+    <div class="sub" style="margin-top:4px">Max tool-calling loops before forced stop</div>
     <button class="btn btn-chatbot" style="margin-top:10px" onclick="clearChat()">
         🗑 Clear Chat
     </button>
@@ -294,7 +303,7 @@ async function send() {
         try {
             const r = await fetch('/api/chat', {
                 method:'POST', headers:{'Content-Type':'application/json'},
-                body: JSON.stringify({query:q, mode:'chatbot'})
+                body: JSON.stringify({query:q, mode:'chatbot', max_iterations: document.getElementById('iterSlider').value})
             });
             const d = await r.json();
             const el = currentMode==='both' ? document.getElementById('chatArea').children[document.getElementById('chatArea').children.length-2] : last();
@@ -308,7 +317,7 @@ async function send() {
         try {
             const r = await fetch('/api/chat', {
                 method:'POST', headers:{'Content-Type':'application/json'},
-                body: JSON.stringify({query:q, mode:'agent'})
+                body: JSON.stringify({query:q, mode:'agent', max_iterations: document.getElementById('iterSlider').value})
             });
             const d = await r.json();
             last().remove();
